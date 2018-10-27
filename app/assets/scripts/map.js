@@ -441,23 +441,11 @@ function createLocationMarker(marker_info){
 function initResourceSearch() {
   // Click 'Search' on search box
   $('#search-user-resources').click(function() {
-    var query = '?' + 'name=' + $('#resources-input').val();
-    var requiredOptions = [];
-    $("#search-resources-req-options :selected").each(function() {
-      requiredOptions.push($(this).val());
-    });
-    for (var i = 0; i < requiredOptions.length; i++) {
-      query += '&reqoption=' + requiredOptions[i];
-    }
-    var optionalOptions = [];
-    $("#advanced-search select").each(function() {
-        optionalOptions.push($(this).val());
-    })
-    for (var i = 0; i < optionalOptions.length; i++) {
-        query += '&optoption=' + optionalOptions[i];
-    }
+    var query = '?' + 'name=' + $('#resources-input').val(),
+        oo = window.optOption;
+    query += oo ? "&optoption="+oo : '';
     var endpoint = '/search-resources'+query;
-    resourceSearchRequest(endpoint);
+	resourceSearchRequest(endpoint);
     $('#resource-info').hide();
   });
 
