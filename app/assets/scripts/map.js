@@ -446,6 +446,11 @@ function initResourceSearch() {
 	$('#search-user-resources').trigger("click");
   });
 
+  // Close Service type selection
+  $("#advanced-filters-hide").click(function() {
+    window.optOption = "";
+  });
+
   // Click 'Search' on search box
   $('#search-user-resources').click(function() {
     var query = '?' + 'name=' + $('#resources-input').val(),

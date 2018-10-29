@@ -40,7 +40,7 @@ def index():
 
 @main.route('/get-resources')
 def get_resources():
-    resources = Resource.query.all()
+    resources = Resource.query.order_by(Resource.name).all()
     resources_as_dicts = Resource.get_resources_as_dicts(resources)
     return json.dumps(resources_as_dicts)
 
@@ -53,7 +53,7 @@ def search_resources():
     if req_options is None:
         req_options = []
     # case insensitive search
-    resource_pool = Resource.query.filter(Resource.name.ilike('%{}%'.format(name))).all()
+    resource_pool = Resource.query.order_by(Resource.name).filter(Resource.name.ilike('%{}%'.format(name))).all()
     req_opt_desc = RequiredOptionDescriptor.query.all()
     if req_opt_desc:
         req_opt_desc = req_opt_desc[0]

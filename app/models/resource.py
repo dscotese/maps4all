@@ -333,7 +333,7 @@ class Resource(db.Model):
 
     @staticmethod
     def print_resources():
-        resources = Resource.query.all()
+        resources = Resource.query.all().order_by(name)
         for resource in resources:
             print(resource)
             print(resource.address)
