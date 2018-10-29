@@ -1,0 +1,30 @@
+.ui.fixed.main.menu {
+    background-color: #DDD;
+}
+
+.ui.inverted.menu .item {
+    color: #000;
+}
+
+.ui.input input::-webkit-input-placeholder {
+ color:rgba(0,0,0, 0.87);
+}
+.ui.input input::-moz-placeholder {
+ color:rgba(0,0,0, 0.87);
+}
+.ui.input input:-ms-input-placeholder {
+ color:rgba(0,0,0, 0.87);
+}
+.right.menu {
+ line-height: 1.1;
+}
+.right.menu img {
+ margin-top: 9px;
+ width: 35px; 
+}
+.div-as-option {
+ cursor: pointer;
+}
+#links img {
+ margin-right: 18px;
+}

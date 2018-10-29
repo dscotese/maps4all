@@ -439,6 +439,13 @@ function createLocationMarker(marker_info){
  * Initialize searching on the map by resource name input
  */
 function initResourceSearch() {
+  // Choose a Service type:
+  $(".div-as-option").click(function()
+  {
+	window.optOption="Service type:"+this.innerHTML;
+	$('#search-user-resources').trigger("click");
+  });
+
   // Click 'Search' on search box
   $('#search-user-resources').click(function() {
     var query = '?' + 'name=' + $('#resources-input').val(),
