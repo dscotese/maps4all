@@ -305,6 +305,10 @@ class Resource(db.Model):
             # set ratings
             res['avg_rating'] = resource.get_avg_ratings()
 
+            # Get URL
+            res['hyperlink'] = resource.get_link()
+            print("Hyperlink for {}: {}".format(resource.name,res['hyperlink']))
+
             if '_sa_instance_state' in res:
                 del res['_sa_instance_state']
             resources_as_dicts.append(res)
@@ -352,3 +356,10 @@ class Resource(db.Model):
         ratings = Rating.query.filter_by(resource_id=self.id).all()
         ratings.sort(key=lambda r: r.submission_time, reverse=True)
         return ratings
+
+    def get_link(self):
+        links = HyperlinkAssociation.query.filter_by(resource_id=self.id).all()
+        link = ""
+        if len(links)>0:
+            link = links[0].url
+        return link

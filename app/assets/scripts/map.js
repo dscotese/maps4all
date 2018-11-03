@@ -48,6 +48,7 @@ function markerListener(marker, event) {
     name: marker.title,
     address: marker.address,
     avg_rating: marker.avg_rating,
+    hyperlink: marker.hyperlink,
     responsive: isResponsive,
   };
   var markerInfo = compiledMarkerInfoWindowTemplate(context);
@@ -138,6 +139,7 @@ function displayDetailedResourceView(marker) {
       descriptors: descriptors,
       avg_rating: marker.avg_rating,
       requiredOpts: marker.requiredOpts,
+      hyperlink: marker.hyperlink,
     };
     var resourceInfo = compiledResourceTemplate(context);
     $("#resource-info").html(resourceInfo);
@@ -545,6 +547,7 @@ function createMarker(resource) {
     data: resource.name
   };
   markerToAdd.avg_rating = resource.avg_rating;
+  markerToAdd.hyperlink = resource.hyperlink;
   markerToAdd.resourceID = resource.id;
   markerToAdd.address = resource.address;
   markerToAdd.requiredOpts = resource.requiredOpts;
@@ -565,6 +568,7 @@ function populateListDiv() {
       name: markerToShow.title,
       address: markerToShow.address,
       avg_rating: markerToShow.avg_rating,
+      hyperlink: markerToShow.hyperlink,
       requiredOpts: markerToShow.requiredOpts,
     };
     listResources.push(listResource);
