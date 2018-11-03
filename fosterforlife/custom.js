@@ -6,7 +6,6 @@
 $(function(){
     document.title="Foster For Life National Resource Map";
 
-
 	function addThreeIcons(sid)
 	{
 		// data URLs below created from https://thedevband.com/image-to-base64-converter.html
@@ -34,4 +33,6 @@ $(function(){
 	});
 
 	$("i.icon.search").hide();
+
+	$('a:contains("Contact Us")').attr('href','https://fosterforlife.com/contact/');
 });
