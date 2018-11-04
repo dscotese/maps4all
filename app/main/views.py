@@ -222,3 +222,7 @@ def post_rating():
                 db.session.add(rating)
                 db.session.commit()
     return jsonify(status='success')
+
+@main.route('/<string:top_level_folder>/', methods =['GET'])
+def tlf_hello(top_level_folder):
+    return "Hello, {}".format(top_level_folder)
