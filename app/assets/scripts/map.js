@@ -73,8 +73,13 @@ function markerListener(marker, event) {
   }
 
   // Marker "more information" link to detailed resource information view
-  $(".more-info").click(function() {
-    displayDetailedResourceView(marker);
+  // We use setTimeout because InfoWindow does, and if we don't wait for
+  // it, the .more-info element won't be found.
+  // --------------------------------------------------------------------
+  window.setTimeout(function () {
+      $(".more-info").click(function() {
+        displayDetailedResourceView(marker);
+      });
   });
 }
 
