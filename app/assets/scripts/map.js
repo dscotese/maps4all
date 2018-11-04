@@ -73,10 +73,10 @@ function markerListener(marker, event) {
   }
 
   // Marker "more information" link to detailed resource information view
-  // We use setTimeout because InfoWindow does, and if we don't wait for
-  // it, the .more-info element won't be found.
+  // InfoWindow is not immediately attached to the DOM.  When it is, the
+  // following event fires, so we attach inside it.
   // --------------------------------------------------------------------
-  window.setTimeout(function () {
+  google.maps.event.addListener(infowindow, 'domready', function() {
       $(".more-info").click(function() {
         displayDetailedResourceView(marker);
       });
