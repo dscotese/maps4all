@@ -8,6 +8,7 @@ from app.models import (
     CsvHeaderCell,
     CsvHeaderRow,
     Resource,
+    Locale,
     Role,
     User,
     RequiredOptionDescriptor,
@@ -98,6 +99,7 @@ def setup_prod():
 def setup_general():
     """Runs the set-up needed for both local development and production."""
     Role.insert_roles()
+    Locale.insert_national()
     RequiredOptionDescriptor.init_required_option_descriptor()
 
 

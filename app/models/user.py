@@ -8,6 +8,7 @@ from .. import db, login_manager
 
 class Permission:
     GENERAL = 0x01
+    MANAGE = 0x7f
     ADMINISTER = 0xff
 
 
@@ -27,6 +28,9 @@ class Role(db.Model):
                 Permission.GENERAL,
                 'moderator',
                 True
+            ),
+            'Manager': (
+                Permission.MANAGE, 'manager', False
             ),
             'Administrator': (
                 Permission.ADMINISTER, 'admin', False  # grants all permissions

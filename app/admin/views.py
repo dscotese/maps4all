@@ -1,5 +1,6 @@
 import os
 import datetime
+import sys
 from flask import (
     abort,
     flash,
@@ -17,7 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from . import admin
 from .. import db
 from ..decorators import admin_required
-from ..models import Role, User, Rating, Resource, EditableHTML, SiteAttribute
+from ..models import Role, User, Rating, Resource, EditableHTML, SiteAttribute, Locale
 from .forms import (
     ChangeAccountTypeForm,
     ChangeUserEmailForm,
@@ -29,7 +30,7 @@ from .forms import (
     ChangeTwilioCredentialsForm
 )
 from ..email import send_email
-from ..utils import s3_upload
+from ..utils import s3_upload, tlf
 
 
 @admin.route('/')
@@ -386,3 +387,24 @@ def change_twilio_credentials():
         db.session.commit()
         flash('Twilio credentials successfully updated.', 'form-success')
     return render_template('admin/customize_site.html', app_name=SiteAttribute.get_value("ORG_NAME"), form=form)
+
+@admin.route('/<tlfCmd>/<string:top_level_folder>', methods =['GET'])
+def admin_locale(tlfCmd, top_level_folder):
+    if current_user.is_admin():
+        if tlfCmd.upper() == "DELETE":
+            if Locale.remove_locale(top_level_folder):
+                flash('Locale successfully deleted.', 'success')
+            else:
+                flash(top_level_folder+' not found.', 'error')
+        elif tlfCmd.upper() == "CREATE":
+            if Locale.add_locale(top_level_folder):
+                flash('Locale successfully added.', 'success')
+                return redirect("/"+top_level_folder, code=302)
+            else:
+                flash('Something went wront.  Maybe try again?', 'error')
+        else:
+            flash(tlfCmd+' is not supported.')
+    else:
+        abort(404)
+    return redirect("/national/", code=302)
+

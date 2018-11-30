@@ -22,7 +22,7 @@ from .forms import (
 
 
 @account.route('/login', methods=['GET', 'POST'])
-def login():
+def login(tlf="national"):
     """Log in an existing user."""
     form = LoginForm()
     if form.validate_on_submit():
@@ -39,7 +39,7 @@ def login():
 
 @account.route('/logout')
 @login_required
-def logout():
+def logout(tlf="national"):
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
@@ -48,7 +48,7 @@ def logout():
 @account.route('/manage', methods=['GET', 'POST'])
 @account.route('/manage/info', methods=['GET', 'POST'])
 @login_required
-def manage():
+def manage(tlf="national"):
     """Display a user's account information."""
     return render_template('account/manage.html', user=current_user, form=None)
 

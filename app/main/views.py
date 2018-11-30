@@ -1,17 +1,19 @@
 import json
 import os
+import sys
 from twilio.rest.lookups import TwilioLookupsClient
 from twilio.rest import TwilioRestClient
-from flask import render_template, url_for, request, jsonify
-from flask.ext.login import login_required
+from flask import render_template, url_for, request, jsonify, abort, flash, redirect
+from flask.ext.login import login_required, current_user
 from twilio import twiml
 from app import csrf
 from .. import db
-from ..models import EditableHTML, Resource, Rating, Descriptor, OptionAssociation, RequiredOptionDescriptor
+from ..models import EditableHTML, Resource, Rating, Descriptor, OptionAssociation, RequiredOptionDescriptor, Locale
 from . import main
 from wtforms.fields import SelectMultipleField, TextAreaField
 from ..single_resource.forms import SingleResourceForm
 from datetime import datetime
+from ..utils import tlf
 
 @main.route('/')
 def index():
@@ -223,6 +225,3 @@ def post_rating():
                 db.session.commit()
     return jsonify(status='success')
 
-@main.route('/<string:top_level_folder>/', methods =['GET'])
-def tlf_hello(top_level_folder):
-    return "Hello, {}".format(top_level_folder)

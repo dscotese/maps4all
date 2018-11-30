@@ -4,6 +4,7 @@ from .. import db
 class EditableHTML(db.Model):
     """ CKEditor instances """
     id = db.Column(db.Integer, primary_key=True)
+    locale = db.Column(db.Integer, db.ForeignKey('locales.id', ondelete='CASCADE'))
     editor_name = db.Column(db.String(100), unique=True)
     page_name = db.Column(db.String(100), unique=True)
     value = db.Column(db.Text)

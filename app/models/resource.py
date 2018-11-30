@@ -1,7 +1,10 @@
 from .. import db
 from .. models import Rating
+from flask.ext.login import current_user, login_required
+from flask import abort
 import os
 
+SubDomain = 0
 
 class OptionAssociation(db.Model):
     """
@@ -164,7 +167,6 @@ class RequiredOptionDescriptor(db.Model):
         db.session.add(required_option_descriptor)
         db.session.commit()
 
-
 class Resource(db.Model):
     """
     Schema for resources with relationships to descriptors.
@@ -172,9 +174,14 @@ class Resource(db.Model):
     __tablename__ = 'resources'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(500), index=True)
+    locale_id = db.Column(db.Integer, db.ForeignKey('locales.id', ondelete='CASCADE'))
     address = db.Column(db.String(500))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
+    locale = db.relationship(
+        'Locale', 
+        #foreign_keys="[Locale.id]",
+        back_populates='resources')
     text_descriptors = db.relationship(
         'TextAssociation',
         back_populates='resource',
@@ -363,3 +370,65 @@ class Resource(db.Model):
         if len(links)>0:
             link = links[0].url
         return link
+
+
+class Locale(db.Model):
+    """ Each installation will have a row in this table """
+    __tablename__ = 'locales'
+    id = db.Column(db.Integer, primary_key=True)
+    subdomain = db.Column(db.String)
+    sponsor = db.Column(db.String(500), default="Foster for life")
+    manager = db.Column(db.String(500), default="Foster for life")
+    resources = db.relationship(
+        'Resource',
+        #foreign_keys="[Resource.locale_id]",
+        back_populates='locale',
+        cascade='all, delete-orphan'
+    )
+
+    @staticmethod
+    def insert_national():
+        nat_locale = Locale.query.first()
+        if nat_locale is None:
+            nat_locale = Locale(subdomain = "")
+            db.session.add(nat_locale)
+            db.session.commit()
+
+    @staticmethod
+    def check_locale(sd):
+        if "." in sd or sd == "static" or sd == "national":
+            return True
+        else:
+            return Locale.query.filter_by(subdomain=sd).first()
+
+    @staticmethod
+    def add_locale(sd):
+        subdomain = Locale.query.filter_by(subdomain=sd).first()
+        if subdomain is None and current_user.is_admin():
+            subdomain = Locale(subdomain=sd)
+
+            db.session.add(subdomain)
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
+                e = sys.exc_info()[0]
+        return Locale.check_locale(sd)
+
+    @staticmethod
+    def remove_locale(top_level_folder):
+        no_place = Locale.query.filter_by(subdomain=top_level_folder).first()
+        if no_place is None:
+            return False
+        else:
+            db.session.delete(no_place)
+            try:
+                db.session.commit()
+                return True
+            except:
+                db.session.rollback()
+                e = sys.exc_info()[0]
+        return False
+
+    def __repr__(self):
+        return '<Locale \'%s\'>' % self.name()

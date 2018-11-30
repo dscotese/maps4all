@@ -1,6 +1,6 @@
-import os, json, boto3
-from flask import url_for
-from .models import EditableHTML, SiteAttribute
+import os, json, boto3, sys
+from flask import url_for, abort
+from .models import EditableHTML, SiteAttribute, Locale
 from werkzeug.utils import secure_filename
 from uuid import uuid4
 
@@ -76,4 +76,11 @@ def s3_upload(source_file, acl='public-read'):
 
     return destination_filename
 
-
+def tlf(top_level_folder):
+    if top_level_folder != None:
+        print ("Top level folder is",top_level_folder)
+    sys.stdout.flush()
+    subdomain = Locale.set_subdomain(top_level_folder)
+    print ("subdomain is",subdomain)
+    sys.stdout.flush()
+    return subdomain
