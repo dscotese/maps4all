@@ -1,6 +1,6 @@
 from flask import Blueprint, g
 
-bulk_resource = Blueprint('bulk_resource', __name__, url_prefix='/<tlf>/bulk_resource')
+bulk_resource = Blueprint('bulk_resource', __name__, url_prefix='/<tlf>/bulk-resource')
 
 @bulk_resource.url_defaults
 def add_locale(endpoint, values):

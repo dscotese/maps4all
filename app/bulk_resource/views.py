@@ -3,6 +3,7 @@ import json
 import geocoder
 import time
 import os
+import sys
 
 from flask import abort, jsonify, redirect, render_template, request, url_for, flash, make_response
 from flask.ext.login import current_user, login_required
@@ -85,6 +86,9 @@ def upload_row():
     """ Processes each Deferred Ajax request """
     data = json.loads(request.form['json'])
 
+    print("Found", request.form['json'])
+    sys.stdout.flush()
+
     # Store CSV fields as descriptors
     if data['action'] == 'fields-reset': # Reset operation
         try:
@@ -115,7 +119,10 @@ def upload_row():
                 })
         except:
             db.session.rollback()
-            abort(404)
+            return jsonify({
+                "status": "Error",
+                "message": "Failed to add fields",
+                })
     if data['action'] == 'fields-update': # Update operation
         try:
             fields = data['fields']
@@ -180,8 +187,10 @@ def upload_row():
                 })
         except:
             db.session.rollback()
-            abort(404)
-
+            return jsonify({
+                "status": "Error",
+                "message": "Field Update operation failed."
+                })
     # Store CSV rows
     if data['action'] == 'reset-update': # Reset operation
         try:
@@ -215,7 +224,10 @@ def upload_row():
                 })
         except:
             db.session.rollback()
-            abort(404)
+            return jsonify({
+                "status": "Error",
+                "message": "reset-update failed."
+                })
     if data['action'] == 'update': # Update operation
         try:
             row = data['row']
@@ -233,7 +245,10 @@ def upload_row():
 
             csv_storage = CsvStorage.most_recent(user=current_user)
             if csv_storage is None:
-                abort(404)
+                return jsonify({
+                    "status": "Error",
+                    "message": "csv_storage was None"
+                    })
 
             csv_row = CsvRow(
                 csv_storage=csv_storage,
@@ -254,13 +269,19 @@ def upload_row():
                 })
         except:
             db.session.rollback()
-            abort(404)
+            return jsonify({
+                "status": "Error",
+                "message": "Database failure in 'update'"
+                })
 
     # Done processing CSV, move onto next step
     if data['action'] == 'finished':
         csv_storage = CsvStorage.most_recent(user=current_user)
         if csv_storage is None:
-            abort(404)
+            return jsonify({
+               "status": "Error",
+                "message": "csv_storage was None"
+                })
 
         if len(csv_storage.csv_rows) == 0:
             return jsonify({
@@ -405,7 +426,7 @@ def set_required_option_descriptor():
         elif form.required_option_descriptor.data == "":
             flash('Error: You must select a required option descriptor. Please try again.', 'form-error')
         else:
-            # Store the selected required option descriptor
+            # Store  the selected required option descriptor
             RequiredOptionDescriptorConstructor.query.delete()
             db.session.commit()
 

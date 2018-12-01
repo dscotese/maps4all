@@ -10,6 +10,7 @@ var infowindow;
 var focusZoom = 17;
 var locationMarker;
 var allResourceBounds;
+var tlf = location.href.split('/')[3];
 
 // Click listener for a marker.
 function markerListener(marker, event) {
@@ -219,7 +220,7 @@ function submitReview(rating, review, id){
   'id': id,
   };
   $.ajax({
-     url: '/rating-post',
+     url: '/'+tlf+'/rating-post',
      data: JSON.stringify(ratingReview),
      contentType: 'application/json',
      dataType: 'json',
@@ -235,7 +236,7 @@ function sendText(number,id) {
     'id': id
   };
   $.ajax({
-    url:'/send-sms',
+    url:'/'+tlf+'/send-sms',
     data: JSON.stringify(twilioText),
     contentType: 'application/json',
     dataType:'json',
@@ -311,7 +312,7 @@ function initMap() {
   initCurrentLocationButton();
   setInitialZoom();
 
-  $.get('/get-resources').done(function(resourcesString) {
+  $.get('/'+tlf+'/get-resources').done(function(resourcesString) {
     var resources = JSON.parse(resourcesString);
     if (resources && resources.length > 0) {
       populateMarkers(resources);
@@ -472,7 +473,7 @@ function initResourceSearch() {
   // all resources again
   $('#resources-input').keyup(function() {
     if ($(this).val().length === 0) {
-      resourceSearchRequest('/get-resources');
+      resourceSearchRequest('/'+tlf+'/get-resources');
     }
   });
 }
@@ -497,7 +498,7 @@ function initResetButton() {
     $('#pac-input').val('');
 
     // show all resources again
-    resourceSearchRequest('/get-resources');
+    resourceSearchRequest('/'+tlf+'/get-resources');
   });
 }
 

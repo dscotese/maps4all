@@ -1,6 +1,6 @@
 from flask import Blueprint, g
 
-main = Blueprint('main', __name__, url_prefix='/<tlf>/')
+main = Blueprint('main', __name__, url_prefix='/<tlf>')
 
 @main.url_defaults
 def add_locale(endpoint, values):

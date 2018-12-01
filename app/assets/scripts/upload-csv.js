@@ -1,4 +1,5 @@
 // Helper to initialize CSV Upload components in templates/bulk_resource/upload.html
+var tlf = location.href.split('/')[3];
 function initializeUpload() {
   $('.ui.radio.checkbox').checkbox();
 
@@ -189,7 +190,7 @@ function submitCsvData(numRows, rowObjects, fields) {
     };
     return $.ajax({
       type: "POST",
-      url: "/bulk-resource/_upload",
+      url: '/'+tlf+"/bulk-resource/_upload",
       data: {json: JSON.stringify(data)},
       dataType: "JSON",
       success: function(res) {

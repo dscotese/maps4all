@@ -105,7 +105,7 @@
     {% if current_user.is_authenticated() %}
       <script>
         // Generates the icon for unread suggested resources
-        $.get('/suggestion/unread', function (data) {
+        $.get('{{ url_for('suggestion.unread') }}', function (data) {
             var numUnread = data;
             if (parseInt(numUnread) > 0) {
                 var icon = document.createElement("i");
@@ -185,7 +185,7 @@
     {% if current_user.is_authenticated() %}
       <script>
         // Generates the icon for unread suggested resources
-        $.get('/suggestion/unread', function (data) {
+        $.get('{{ url_for('suggestion.unread') }}', function (data) {
             var numUnread = data;
             if (parseInt(numUnread) > 0) {
                 var icon = document.createElement("i");

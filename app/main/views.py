@@ -17,6 +17,8 @@ from ..utils import tlf
 
 @main.route('/')
 def index():
+    print(url_for('main.get_resources'))
+    sys.stdout.flush()
     req_opt_desc = RequiredOptionDescriptor.query.all()
     req_opt_id = -1
     if req_opt_desc:
