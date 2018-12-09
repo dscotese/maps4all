@@ -3,7 +3,7 @@ import os
 import sys
 from twilio.rest.lookups import TwilioLookupsClient
 from twilio.rest import TwilioRestClient
-from flask import render_template, url_for, request, jsonify, abort, flash, redirect
+from flask import render_template, url_for, request, jsonify, abort, flash, redirect, g
 from flask.ext.login import login_required, current_user
 from twilio import twiml
 from app import csrf
@@ -17,8 +17,6 @@ from ..utils import tlf
 
 @main.route('/')
 def index():
-    print(url_for('main.get_resources'))
-    sys.stdout.flush()
     req_opt_desc = RequiredOptionDescriptor.query.all()
     req_opt_id = -1
     if req_opt_desc:
@@ -44,7 +42,7 @@ def index():
 
 @main.route('/get-resources')
 def get_resources():
-    resources = Resource.query.order_by(Resource.name).all()
+    resources = Resource.query.filter_by(locale_id=g.tlf_id).order_by(Resource.name).all()
     resources_as_dicts = Resource.get_resources_as_dicts(resources)
     return json.dumps(resources_as_dicts)
 

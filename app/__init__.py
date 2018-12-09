@@ -1,6 +1,6 @@
 import os, sys
 from functools import wraps
-from flask import Flask, g, abort
+from flask import Flask, g, abort, flash, redirect, url_for
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -90,13 +90,13 @@ def create_app(config_name):
         g.tlf = request.path[1:].split('/',1)[0] 
 
         from .models import Locale
-        Locale.check_locale(g.tlf)
+        if not Locale.check_locale(g.tlf):
+            #Flask.flash('Perhaps you want to www.resourcemap.org/national/admin/create/'+g.tlf,'error')
+            return redirect('/national/', code=302)
+            #abort(404)
 
-    @app.after_request
-    def ar(response):
-        #if not tlf(g.tlf):
-        pass #abort(404)
-        return response
+    @app.route('/')
+    def gotoNational():
+        return redirect('/national/',302)
+
     return app
-
-

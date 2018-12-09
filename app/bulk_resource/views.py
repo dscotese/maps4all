@@ -5,7 +5,7 @@ import time
 import os
 import sys
 
-from flask import abort, jsonify, redirect, render_template, request, url_for, flash, make_response
+from flask import abort, g, jsonify, redirect, render_template, request, url_for, flash, make_response
 from flask.ext.login import current_user, login_required
 
 from flask_wtf.file import (
@@ -260,6 +260,7 @@ def upload_row():
             ).first()
             if existing_resource is not None:
                 csv_row.resource_id = existing_resource.id
+                csv_row.locale_id = g.tlf_id
 
             db.session.add(csv_row)
             db.session.commit()
@@ -542,7 +543,7 @@ def validate_required_option_descriptor():
                 if req_descriptor is not None:
                     curr_req = req_descriptor.name
 
-        resources = Resource.query.all()
+        resources = Resource.query.filter_by(locale_id=g.tlf_id).all()
         for r in resources:
             # If no previous required option descriptor
             # or new required is not same as old
@@ -681,6 +682,7 @@ def save_csv():
             else:
                 name = row.data['Name']
                 address = row.data['Address']
+                locale = g.tlf_id
                 cached = GeocoderCache.query.filter_by(
                     address=address
                 ).first()
@@ -690,6 +692,7 @@ def save_csv():
                 resource = Resource(
                     name=name,
                     address=address,
+                    locale_id=locale,
                     latitude=cached.latitude,
                     longitude=cached.longitude
                 )

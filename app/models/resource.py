@@ -173,8 +173,8 @@ class Resource(db.Model):
     """
     __tablename__ = 'resources'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(500), index=True)
     locale_id = db.Column(db.Integer, db.ForeignKey('locales.id', ondelete='CASCADE'))
+    name = db.Column(db.String(500), index=True)
     address = db.Column(db.String(500))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
@@ -314,7 +314,6 @@ class Resource(db.Model):
 
             # Get URL
             res['hyperlink'] = resource.get_link()
-            print("Hyperlink for {}: {}".format(resource.name,res['hyperlink']))
 
             if '_sa_instance_state' in res:
                 del res['_sa_instance_state']
@@ -371,6 +370,7 @@ class Resource(db.Model):
             link = links[0].url
         return link
 
+from flask import g
 
 class Locale(db.Model):
     """ Each installation will have a row in this table """
@@ -396,10 +396,16 @@ class Locale(db.Model):
 
     @staticmethod
     def check_locale(sd):
-        if "." in sd or sd == "static" or sd == "national":
+        if "." in sd or sd == "static":
             return True
+        elif sd == "national":
+            g.tlf_id = 1
         else:
-            return Locale.query.filter_by(subdomain=sd).first()
+            locale = Locale.query.filter_by(subdomain=sd).first()
+            if locale == None:
+                return False
+            g.tlf_id = locale.id
+        return True
 
     @staticmethod
     def add_locale(sd):

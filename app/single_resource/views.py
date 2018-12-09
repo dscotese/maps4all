@@ -178,7 +178,7 @@ def edit(resource_id):
                                            form=form,
                                            resource_id=resource_id)
         # Field id is not needed for the form, hence omitted with [1:].
-        for field_name in resource_field_names[1:]:
+        for field_name in resource_field_names[2:]:
             setattr(resource, field_name, form[field_name].data)
         save_associations(resource=resource,
                           form=form,
@@ -193,7 +193,7 @@ def edit(resource_id):
             flash('Error: failed to save resource. Please try again.',
                   'form-error')
     # Field id is not needed for the form, hence omitted with [1:].
-    for field_name in resource_field_names[1:]:
+    for field_name in resource_field_names[2:]:
         if form[field_name]:
             form[field_name].data = resource.__dict__[field_name]
     return render_template('single_resource/edit.html',

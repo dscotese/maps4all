@@ -78,8 +78,12 @@ function markerListener(marker, event) {
   // following event fires, so we attach inside it.
   // --------------------------------------------------------------------
   google.maps.event.addListener(infowindow, 'domready', function() {
-      $(".more-info").click(function() {
-        displayDetailedResourceView(marker);
+      $(".more-info").click(function()
+      {
+	if(tlf != "national")
+          displayDetailedResourceView(marker);
+        else
+          location.href="/"+marker.hyperlink+"/";
       });
   });
 }
