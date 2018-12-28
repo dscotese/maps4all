@@ -35,4 +35,24 @@ $(function(){
 	$("i.icon.search").hide();
 
 	$('a:contains("Contact Us")').attr('href','https://fosterforlife.com/contact/');
+
+	var sh = $('tr#sponsor h2');
+	var mh = $('tr#manager h2');
+	var sa = $('tr#sponsor a');
+	var ma = $('tr#manager a');
+	switch(location.href.split('/')[3])
+	{
+		case 'dc':
+		    sh.html('Sponsored by<br>John Newby');
+		    mh.html('Managed by<br>');
+		    sa.attr('href','https://jnwebsite.xyz');
+		    ma.attr('href','https://missing.xyz');
+		    break;
+    }
+	if($('tr#manager a').attr('href')==$('tr#sponsor a').attr('href'))
+	{
+		$('tr#manager').hide();
+		snm = $('tr#sponsor h2').html();
+		$('tr#sponsor h2').html(snm.replace('Sponsored','Sponsored and<br>Managed'));
+	}
 });
