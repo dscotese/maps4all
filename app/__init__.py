@@ -94,6 +94,7 @@ def create_app(config_name):
             #Flask.flash('Perhaps you want to www.resourcemap.org/national/admin/create/'+g.tlf,'error')
             return redirect('/national/', code=302)
             #abort(404)
+        return None
 
     @app.route('/')
     def gotoNational():

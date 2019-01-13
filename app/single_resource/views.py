@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for, request, make_response
+from flask import abort, flash, g, redirect, render_template, url_for, request, make_response
 from flask.ext.login import login_required
 from sqlalchemy.exc import IntegrityError
 from wtforms.fields import SelectMultipleField, SelectField, TextAreaField, StringField
@@ -16,7 +16,7 @@ from .forms import SingleResourceForm
 @login_required
 def index():
     """View resources in a list."""
-    resources = Resource.query.all()
+    resources = Resource.query.filter_by(locale_id=g.tlf_id).order_by(Resource.name).all()
     req_opt_desc = RequiredOptionDescriptor.query.all()
     if req_opt_desc:
         req_opt_desc = req_opt_desc[0]

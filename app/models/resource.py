@@ -1,7 +1,7 @@
 from .. import db
 from .. models import Rating
 from flask.ext.login import current_user, login_required
-from flask import abort
+from flask import abort, redirect
 import os
 
 SubDomain = 0
@@ -396,7 +396,11 @@ class Locale(db.Model):
 
     @staticmethod
     def check_locale(sd):
-        if "." in sd or sd == "static":
+        if "." in sd:
+            g.tlf_id = 0
+            return redirect("/static/"+sd)
+        if sd == "static":
+            g.tlf_id = 0
             return True
         elif sd == "national":
             g.tlf_id = 1

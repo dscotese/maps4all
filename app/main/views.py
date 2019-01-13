@@ -17,6 +17,8 @@ from ..utils import tlf
 
 @main.route('/')
 def index():
+    if g.tlf_id == 0:
+       abort(404) 
     req_opt_desc = RequiredOptionDescriptor.query.all()
     req_opt_id = -1
     if req_opt_desc:
