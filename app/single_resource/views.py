@@ -100,7 +100,8 @@ def create():
         new_resource = Resource(name=form.name.data,
                                 address=form.address.data,
                                 latitude=form.latitude.data,
-                                longitude=form.longitude.data)
+                                longitude=form.longitude.data,
+                                locale_id=g.tlf_id)
         db.session.add(new_resource)
         save_associations(resource=new_resource,
                           form=form,
